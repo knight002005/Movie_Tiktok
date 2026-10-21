@@ -1,0 +1,16 @@
+{
+  "series": "<series-slug>",
+  "episode": "epNN",
+  "title": "<Tiêu đề tập>",
+  "state": "idea",
+  "gates": {
+    "script": { "approved": false, "version": null, "at": null, "note": "" },
+    "release": { "approved": false, "at": null, "note": "" }
+  },
+  "review_rounds": 0,
+  "scheduled_at": null,
+  "published_at": null,
+  "history": [
+    { "at": "<ISO 8601>", "state": "idea", "by": "<agent | anh>", "note": "" }
+  ]
+}
