@@ -13,7 +13,12 @@
   "style": "anime style, modern josei illustration, clean lineart, cel shading, soft lighting, masterpiece, high score, great score, absurdres",
   "framing": "half body, upper body, facing viewer, three-quarter view, centered, simple white background",
   "negative": "lowres, bad anatomy, bad hands, extra fingers, missing fingers, text, watermark, signature, username, logo, cropped, worst quality, low quality, low score, bad score, blurry, child, loli, chibi, nsfw, cleavage, revealing clothes, multiple people, open mouth",
-  "face_fallback_box": [0.33, 0.12, 0.34, 0.24],
+  "face_fallback_box": [
+    0.33,
+    0.12,
+    0.34,
+    0.24
+  ],
   "generation": {
     "width": 832,
     "height": 1216,
@@ -21,7 +26,7 @@
     "inpaint_steps": 30,
     "guidance": 5.0,
     "face_strength": 0.7,
-    "eye_strength": 0.9,
+    "eye_strength": 0.95,
     "sprite_height": 1800
   },
   "characters": [
@@ -33,7 +38,17 @@
         "p1": "standing, arms at sides",
         "p2": "holding a smartphone near chest"
       },
-      "expressions": ["neutral", "smile", "angry", "sad", "surprised", "embarrassed", "cold", "cry", "panic"]
+      "expressions": [
+        "neutral",
+        "smile",
+        "angry",
+        "sad",
+        "surprised",
+        "embarrassed",
+        "cold",
+        "cry",
+        "panic"
+      ]
     }
   ]
 }

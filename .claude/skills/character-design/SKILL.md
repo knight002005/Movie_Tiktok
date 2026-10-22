@@ -18,6 +18,12 @@ Cấu trúc prompt = `STYLE` (chung series) + `CHARACTER TAG` (cố định từ
 - **NEGATIVE** chung: `child, loli, chibi, nsfw, revealing clothes, cleavage, text, watermark, logo, extra fingers, deformed hands, multiple people`
 Không bao giờ thay đổi CHARACTER TAG giữa các lần tạo. Muốn sửa nhân vật → sửa tag, tạo lại **toàn bộ** sprite.
 
+**Ngân sách token (bắt buộc — bài học từ lần chạy Kaggle 2026-10-22):** model SD/SDXL chỉ đọc **77 token** đầu; phần dư bị cắt im lặng (lần đầu mất sạch biểu cảm, trang phục, khung hình → ảnh sai). Vì vậy:
+- Viết **tag ngắn kiểu danbooru**, không viết câu: `high ponytail, pencil in hair` thay vì `dark brown hair in a high ponytail, a yellow pencil stuck in her hair tie`.
+- CHARACTER TAG ≤ **35 token**; STYLE ≤ 6; FRAMING ≤ 12; tư thế ≤ 8; prompt bối cảnh + biến thể ≤ 45.
+- Mô tả dài, đầy đủ để ở `profile.md` (cho người đọc); spec chỉ chứa tag ngắn.
+- `sprite_gen.py` tự ghép theo thứ tự ưu tiên (biểu cảm → khung hình → tag → phong cách → tư thế) và in `[prompt] bỏ cụm …` khi vượt — thấy dòng này với ảnh gốc là phải rút gọn spec.
+
 ## 3. Danh sách ảnh cần tạo
 Cho mỗi nhân vật: `pose (≥2) × biểu cảm (≥8) × {mở mắt, nhắm mắt}` ≈ 32 ảnh. Ghi vào `asset-checklist.md`:
 | File đích | Prompt (phần thay đổi) | Trạng thái |

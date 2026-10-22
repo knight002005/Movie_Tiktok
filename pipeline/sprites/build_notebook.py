@@ -43,8 +43,13 @@ def main() -> None:
             "Cách giữ nhân vật đồng nhất: mỗi pose tạo 1 ảnh gốc, biểu cảm chỉ vẽ lại vùng mặt, "
             "nhắm mắt chỉ vẽ lại dải mắt → tóc/áo/phụ kiện giữ nguyên từng pixel."
         ),
+        # Ghim đúng phiên bản đã chạy thử thành công (không dùng -U "mới nhất").
+        # torchao cài sẵn trên Kaggle quá cũ so với diffusers → gỡ đi (không cần dùng).
         # OpenCV 5 đã bỏ CascadeClassifier (bộ dò mặt anime) → ghim <5.
-        code("!pip install -q -U diffusers transformers accelerate \"rembg[gpu]\" \"opencv-python-headless<5\""),
+        code("!pip uninstall -y -q torchao\n"
+             "!pip install -q diffusers==0.41.0 transformers==5.20.2 accelerate==1.15.0 "
+             "\"rembg[gpu]==2.0.85\" \"opencv-python-headless<5\"\n"
+             "import diffusers, transformers; print('diffusers', diffusers.__version__, '| transformers', transformers.__version__)"),
         code("%%writefile sprite_gen.py\n" + source),
         code("%%writefile spec.json\n" + spec),
         code("!python sprite_gen.py --spec spec.json --out /kaggle/working/sprites_out"),

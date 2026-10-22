@@ -1,5 +1,5 @@
 {
-  "_note": "Spec series sep-oi-em-khong-co-y (casting-designer, 2026-10-22T00:10:00+07:00). Chép cấu trúc từ pipeline/sprites/spec.kaggle.json. 'characters' = 4 nhân vật có hình (diep chỉ có chữ, không sprite). Tag/seed KHÓA — muốn sửa nhân vật thì sửa tag và tạo lại TOÀN BỘ sprite của nhân vật đó. 'locations' là phần mới: prompt cuối = location_style + prompt + variants[<biến thể>]; negative = location_negative. Gợi ý cho code tạo nền: biến thể đầu tiên tạo text2img bằng seed của bối cảnh, các biến thể sau img2img từ ảnh biến thể đầu (strength ~0.55) để giữ nguyên bố cục; rồi phóng lên 1440x2560 (V3.4). Kiểm tra giấy phép model trước khi dùng thương mại.",
+  "_note": "Spec series sep-oi-em-khong-co-y (casting-designer, 2026-10-22T00:10:00+07:00). Chép cấu trúc từ pipeline/sprites/spec.kaggle.json. 'characters' = 4 nhân vật có hình (diep chỉ có chữ, không sprite). Tag/seed KHÓA — muốn sửa nhân vật thì sửa tag và tạo lại TOÀN BỘ sprite của nhân vật đó. 'locations' là phần mới: prompt cuối = location_style + prompt + variants[<biến thể>]; negative = location_negative. Gợi ý cho code tạo nền: biến thể đầu tiên tạo text2img bằng seed của bối cảnh, các biến thể sau img2img từ ảnh biến thể đầu (strength ~0.55) để giữ nguyên bố cục; rồi phóng lên 1440x2560 (V3.4). Kiểm tra giấy phép model trước khi dùng thương mại. | 2026-10-22: rút gọn prompt về tag ngắn vì CLIP chỉ đọc 77 token (bản chạy Kaggle đầu bị cắt mất biểu cảm, trang phục, khung hình). Thứ tự ghép: biểu cảm → khung hình → tag nhân vật → tư thế → phong cách. Mô tả đầy đủ vẫn ở characters/<id>/profile.md.",
   "model": {
     "model_id": "cagliostrolab/animagine-xl-4.0",
     "low_vram": false,
@@ -10,10 +10,15 @@
       "scale": 0.6
     }
   },
-  "style": "safe, anime style, modern josei illustration, clean lineart, cel shading, soft even lighting, pastel colors, mature adult proportions, masterpiece, high score, great score, absurdres",
-  "framing": "half body, upper body, facing viewer, three-quarter view, centered, simple white background",
-  "negative": "lowres, bad anatomy, bad hands, extra fingers, missing fingers, fused fingers, text, watermark, signature, username, logo, cropped, worst quality, low quality, low score, bad score, average score, blurry, child, loli, shota, chibi, teenager, school uniform, childlike face, oversized eyes, nsfw, explicit, sensitive, cleavage, revealing clothes, multiple people, open mouth",
-  "face_fallback_box": [0.33, 0.12, 0.34, 0.24],
+  "style": "anime, masterpiece, absurdres",
+  "framing": "upper body, eye level, front view, white background",
+  "negative": "lowres, bad anatomy, bad hands, extra fingers, worst quality, low quality, blurry, chibi, teenager, school uniform, signature, logo, revealing clothes",
+  "face_fallback_box": [
+    0.33,
+    0.12,
+    0.34,
+    0.24
+  ],
   "generation": {
     "width": 832,
     "height": 1216,
@@ -21,107 +26,153 @@
     "inpaint_steps": 30,
     "guidance": 5.0,
     "face_strength": 0.7,
-    "eye_strength": 0.9,
+    "eye_strength": 0.95,
     "sprite_height": 1800
   },
   "characters": [
     {
       "id": "linh",
       "seed": 24101,
-      "tag": "1girl, solo, adult woman, office lady, 24 years old, Vietnamese, medium height, mature face, dark brown hair in a high ponytail, a yellow pencil stuck in her hair tie, side bangs, warm brown eyes, mustard yellow cardigan over cream blouse, beige knee-length skirt, small blank yellow sticky notes stuck on cardigan hem",
+      "tag": "1girl, solo, adult woman, office lady, dark brown hair, high ponytail, pencil in hair, side bangs, brown eyes, mustard yellow cardigan, cream blouse, sticky notes on cardigan",
       "negative": "1boy, male, beard",
       "poses": {
-        "p1": "standing, arms relaxed at sides, leaning slightly forward, energetic posture",
-        "p2": "holding a plain paper coffee cup with both hands near chest"
+        "p1": "standing, arms at sides",
+        "p2": "holding paper coffee cup"
       },
-      "expressions": ["neutral", "smile", "angry", "sad", "surprised", "embarrassed", "cold", "cry", "panic", "love"]
+      "expressions": [
+        "neutral",
+        "smile",
+        "angry",
+        "sad",
+        "surprised",
+        "embarrassed",
+        "cold",
+        "cry",
+        "panic",
+        "love"
+      ]
     },
     {
       "id": "khai",
       "seed": 29201,
-      "tag": "1boy, solo, adult male, businessman, 29 years old, Vietnamese, tall, broad shoulders, mature face, short neat black hair, sharp dark gray eyes, white dress shirt, navy blue necktie, light ice-blue tie clip, silver metal wristwatch, dark navy trousers",
+      "tag": "1boy, solo, adult man, businessman, tall, short black hair, sharp gray eyes, white dress shirt, navy necktie, blue tie clip, silver wristwatch",
       "negative": "1girl, female, glasses, beard, loose necktie",
       "poses": {
-        "p1": "standing straight, upright posture, arms at sides",
-        "p2": "arms crossed over chest, upright posture"
+        "p1": "standing straight, arms at sides",
+        "p2": "crossed arms"
       },
-      "expressions": ["neutral", "smile", "angry", "sad", "surprised", "embarrassed", "cold", "cry", "love"]
+      "expressions": [
+        "neutral",
+        "smile",
+        "angry",
+        "sad",
+        "surprised",
+        "embarrassed",
+        "cold",
+        "cry",
+        "love"
+      ]
     },
     {
       "id": "vy",
       "seed": 27301,
-      "tag": "1girl, solo, adult woman, office lady, 27 years old, Vietnamese, elegant, mature face, long softly wavy black hair falling past shoulders, side-swept bangs, dark brown eyes, wine red tailored blazer, lavender silk blouse, black knee-length pencil skirt, pearl stud earrings",
+      "tag": "1girl, solo, adult woman, office lady, long wavy black hair, side-swept bangs, dark brown eyes, wine red blazer, lavender blouse, pearl earrings",
       "negative": "1boy, male, ponytail, short hair",
       "poses": {
-        "p1": "standing elegantly, holding a tablet computer against her chest with both arms, tablet screen facing away",
-        "p2": "one hand on hip, other hand holding a tablet computer at her side, confident posture"
+        "p1": "holding tablet to chest",
+        "p2": "hand on hip, holding tablet"
       },
-      "expressions": ["neutral", "smile", "angry", "sad", "surprised", "embarrassed", "cold", "cry", "smirk", "panic"]
+      "expressions": [
+        "neutral",
+        "smile",
+        "angry",
+        "sad",
+        "surprised",
+        "embarrassed",
+        "cold",
+        "cry",
+        "smirk",
+        "panic"
+      ]
     },
     {
       "id": "tung",
       "seed": 27401,
-      "tag": "1boy, solo, adult male, 27 years old, Vietnamese, graphic designer, average height, mature face, messy fluffy light brown dyed hair, friendly brown eyes, lime green hoodie with light orange t-shirt underneath, black over-ear headphones around neck, stylus pen tucked behind ear",
+      "tag": "1boy, solo, adult man, messy light brown hair, brown eyes, lime green hoodie, orange t-shirt, headphones around neck, stylus behind ear",
       "negative": "1girl, female, necktie, suit, glasses",
       "poses": {
-        "p1": "standing relaxed, both hands in hoodie front pocket, slightly slouched",
-        "p2": "holding a smartphone in one hand at chest height, phone screen facing away from viewer"
+        "p1": "hands in hoodie pocket",
+        "p2": "holding smartphone"
       },
-      "expressions": ["neutral", "smile", "angry", "sad", "surprised", "embarrassed", "cold", "cry", "panic", "smirk"]
+      "expressions": [
+        "neutral",
+        "smile",
+        "angry",
+        "sad",
+        "surprised",
+        "embarrassed",
+        "cold",
+        "cry",
+        "panic",
+        "smirk"
+      ]
     }
   ],
-  "location_style": "safe, anime background art, modern josei illustration, clean lineart, cel shading, detailed scenery, no humans, scenery, eye-level view, vertical composition, masterpiece, high score, great score, absurdres",
-  "location_negative": "people, person, human, 1girl, 1boy, character, crowd, silhouette of a person, text, letters, numbers, signage text, logo, brand name, watermark, signature, poster with writing, lowres, worst quality, low quality, low score, bad score, blurry, distorted perspective, fisheye",
+  "location_style": "anime background art, scenery, no humans, eye level, cel shading, masterpiece, absurdres",
+  "location_negative": "people, person, 1girl, 1boy, text, letters, logo, watermark, lowres, worst quality, blurry, fisheye",
   "location_generation": {
     "width": 768,
     "height": 1344,
     "steps": 28,
     "guidance": 5.0,
     "variant_mode": "img2img_from_first",
-    "variant_strength": 0.55,
-    "upscale_to": [1440, 2560],
+    "variant_strength": 0.8,
+    "upscale_to": [
+      1440,
+      2560
+    ],
     "out_pattern": "locations/{id}/{id}_{variant}.png"
   },
   "locations": [
     {
       "id": "loc-thang-may",
       "seed": 51001,
-      "prompt": "modern office building on the 15th floor, clean contemporary interior, no humans, no text, vertical composition",
+      "prompt": "modern office building interior",
       "variants": {
-        "day": "inside a spacious elevator cabin, brushed stainless steel walls, softly blurred mirrored back wall, warm ceiling lights, button panel without numbers, closed steel doors, bright morning",
-        "lobby": "elevator lobby hallway, two closed brushed steel elevator doors, blank floor indicator, light marble floor, potted plant, soft daylight from a window at the end of the hallway"
+        "day": "inside elevator cabin, brushed steel walls, warm ceiling lights, closed doors, morning",
+        "lobby": "elevator lobby, two closed steel elevator doors, marble floor, potted plant, daylight"
       }
     },
     {
       "id": "loc-van-phong",
       "seed": 51101,
-      "prompt": "open-plan creative agency office, rows of light wood desks with computer monitors showing blank soft blue screens, many green plants, large windows with a generic city skyline, foreground desk with many blank yellow sticky notes stuck around the monitor edge, neighboring desk with a drawing tablet and a headphone stand, tidy desk with a tablet stand in the background, no humans, no text, vertical composition",
+      "prompt": "open-plan office, light wood desks, computer monitors, green plants, large windows, city skyline",
       "variants": {
-        "day": "bright morning sunlight through the windows, white and light wood tones, pastel colors, cheerful",
-        "night": "late evening, dark blue and purple tones, city lights outside the windows, only a few warm desk lamps on, monitors glowing softly, quiet empty office"
+        "day": "bright morning sunlight, cheerful pastel colors",
+        "night": "night, dark blue tones, city lights outside, warm desk lamps, empty office"
       }
     },
     {
       "id": "loc-phong-truong-phong",
       "seed": 51201,
-      "prompt": "minimalist manager's office with glass partition walls, glass door wide open on the left side, white and navy blue interior, large desk with neatly stacked documents and a black notebook, minimalist wall clock without numerals, small office printer on a low cabinet beside the desk, window with a generic city view, cool ice blue tint, no humans, no text, vertical composition",
+      "prompt": "manager office, glass walls, open glass door on left, large desk, stacked documents, small printer, city window, white and navy interior",
       "variants": {
-        "day": "bright clear daylight, crisp cool atmosphere",
-        "night": "night, warm desk lamp light, city lights outside the window, dark blue and purple tones"
+        "day": "bright daylight, cool tones",
+        "night": "night, warm desk lamp, city lights, dark blue tones"
       }
     },
     {
       "id": "loc-phong-hop",
       "seed": 51301,
-      "prompt": "modern meeting room, long white conference table with office chairs, large wall-mounted screen turned off showing plain black, blank whiteboard, glass wall, no humans, no text, vertical composition",
+      "prompt": "meeting room, long white conference table, office chairs, blank wall screen, whiteboard, glass wall",
       "variants": {
-        "day": "bright daylight through the windows, clean professional atmosphere, slightly cool tones"
+        "day": "bright daylight, cool tones"
       }
     },
     {
       "id": "loc-pantry",
       "seed": 51401,
-      "prompt": "small office pantry, espresso coffee machine on the counter on the right side, shelf with plain mugs, small fridge, potted plants, window, no humans, no text, no labels, vertical composition",
+      "prompt": "small office pantry, coffee machine on counter, mug shelf, small fridge, plants, window",
       "variants": {
         "day": "warm morning sunlight, cozy yellow tones"
       }
@@ -129,28 +180,28 @@
     {
       "id": "loc-goc-may-in",
       "seed": 51501,
-      "prompt": "office hallway alcove with a large multifunction office printer on the right, a shared trash bin right next to the printer, shelf with paper reams, hallway extending into the background, no humans, no text, vertical composition",
+      "prompt": "office hallway alcove, large office printer on right, trash bin beside printer, paper shelf",
       "variants": {
-        "day": "bright white fluorescent ceiling lights, clean neutral tones",
-        "night": "night, dark hallway, a single ceiling light illuminating only the printer area, dark windows, lonely quiet mood, blue tones"
+        "day": "bright fluorescent lights, neutral tones",
+        "night": "night, dark hallway, single light over printer, blue tones, lonely"
       }
     },
     {
       "id": "loc-san-thuong",
       "seed": 51601,
-      "prompt": "rooftop of an office building, metal and glass railing, potted plants, a wooden bench on the right, generic city skyline without landmarks, wide sky in the upper half, no humans, no text, vertical composition",
+      "prompt": "office building rooftop, glass railing, potted plants, wooden bench on right, city skyline, wide sky",
       "variants": {
-        "day": "clear blue sky with soft clouds, bright daylight",
-        "dusk": "sunset, golden hour, orange and pink sky, long soft shadows, romantic warm light"
+        "day": "clear blue sky, soft clouds, daylight",
+        "dusk": "sunset, golden hour, orange and pink sky, warm light"
       }
     },
     {
       "id": "loc-phong-tro-linh",
       "seed": 51701,
       "optional": true,
-      "prompt": "small cozy rented studio room, single bed with a yellow blanket on the right, small desk with a closed laptop and blank yellow sticky notes on the left, string lights on the wall, window with a night city view, no humans, no text, vertical composition",
+      "prompt": "small cozy studio room, bed with yellow blanket on right, small desk with laptop on left, string lights, window",
       "variants": {
-        "night": "night, warm desk lamp and string lights, blue and purple city glow outside the window, quiet lonely mood"
+        "night": "night, warm lamp and string lights, city glow outside, lonely mood"
       }
     }
   ]

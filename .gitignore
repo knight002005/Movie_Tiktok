@@ -7,3 +7,10 @@ studio/out/
 .cache/
 series/*/voice-tests/audio/
 __pycache__/
+kaggle-test/
+# Ảnh sinh ra (sprite, nền) — nặng, tái tạo được từ sprites.spec.json (seed cố định). Không đưa vào git.
+kaggle-out/
+series/*/characters/*/sprites/
+series/*/characters/*/raw/
+series/*/characters/*/refs/*_base.png
+series/*/locations/*/*.png

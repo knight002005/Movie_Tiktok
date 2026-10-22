@@ -11,6 +11,7 @@ Dùng: python -I -X utf8 pipeline/sprites/kaggle_run.py --spec <spec.json> --slu
 """
 import argparse
 import json
+import os
 import subprocess
 import sys
 import tempfile
@@ -24,7 +25,7 @@ MAX_WAIT_S = 3 * 3600
 
 def kaggle(*args: str) -> str:
     proc = subprocess.run(["kaggle", *args], capture_output=True, text=True, encoding="utf-8", errors="replace",
-                          env={**__import__("os").environ, "PYTHONIOENCODING": "utf-8"})
+                          env={**os.environ, "PYTHONIOENCODING": "utf-8", "PYTHONUTF8": "1"})
     out = (proc.stdout + proc.stderr).strip()
     if proc.returncode != 0:
         raise RuntimeError(f"kaggle {' '.join(args)} lỗi:\n{out}")
@@ -32,7 +33,7 @@ def kaggle(*args: str) -> str:
 
 
 def username() -> str:
-    # Dòng dữ liệu đầu tiên của danh sách kernel: "<user>/<slug> ..." — tránh đọc token trực tiếp.
+    # Lấy username qua "kaggle config view" — không đọc trực tiếp file token.
     out = kaggle("config", "view")
     for line in out.splitlines():
         if line.strip().startswith("- username:"):
@@ -82,11 +83,19 @@ def main() -> None:
 
     dest = Path(args.dest)
     dest.mkdir(parents=True, exist_ok=True)
-    print(kaggle("kernels", "output", kernel_id, "-p", str(dest)))
-    if "error" in status.lower():
-        print("⚠️ Notebook lỗi — xem log đã tải về trong", dest)
+    print(kaggle("kernels", "output", kernel_id, "-p", str(dest), "--force"))
+    # Kaggle vẫn báo COMPLETE khi một ô lệnh "!python ..." lỗi → kiểm tra bằng kết quả thật.
+    pngs = list(dest.rglob("*.png"))
+    if "error" in status.lower() or not pngs:
+        print(f"⚠️ Notebook không tạo ra ảnh (trạng thái: {status.splitlines()[-1] if status else '?'}). Cuối log:")
+        for log in dest.glob("*.log"):
+            try:
+                text = "".join(item.get("data", "") for item in json.loads(log.read_text(encoding="utf-8")))
+            except (ValueError, AttributeError):
+                text = log.read_text(encoding="utf-8", errors="replace")
+            print("\n".join(text.splitlines()[-25:]))
         sys.exit(1)
-    print("Xong →", dest)
+    print(f"Xong: {len(pngs)} ảnh PNG → {dest}")
 
 
 if __name__ == "__main__":

@@ -40,7 +40,7 @@ EXPRESSION_PROMPTS = {
     "smile": "gentle smile, closed mouth",
     "angry": "angry, furrowed eyebrows, glaring, closed mouth",
     "sad": "sad, downcast eyes, closed mouth",
-    "surprised": "surprised, wide open eyes, raised eyebrows, closed mouth",
+    "surprised": "shocked, surprised, wide-eyed, small pupils, raised eyebrows, closed mouth",
     "embarrassed": "embarrassed, blushing cheeks, looking away, closed mouth",
     "cold": "cold expression, half-closed eyes, expressionless, closed mouth",
     "cry": "crying, tears streaming down cheeks, closed mouth",
@@ -73,6 +73,8 @@ def load_pipes(cfg: dict):
             print(f"[cảnh báo] Không nạp được IP-Adapter: {e}")
     # Tạo pipeline inpaint SAU khi nạp IP-Adapter để dùng chung image_encoder.
     inpaint = AutoPipelineForInpainting.from_pipe(t2i)
+    global _TOKENIZER
+    _TOKENIZER = t2i.tokenizer
     return t2i, inpaint, ip_adapter
 
 
@@ -118,8 +120,41 @@ def region_mask(size: tuple[int, int], box: list[int], part: str) -> Image.Image
 
 # ---------- Sinh ảnh ----------
 
+# Cụm chặn luôn đứng đầu negative để không bị cắt: an toàn nội dung (C5, V3.12) + góc máy.
+SAFETY_NEGATIVE = "nsfw, child, loli, cleavage, large breasts, from below, low angle, cropped head, multiple people, text, watermark"
+# Nhắm cả HAI mắt — lần chạy thử đầu model hay vẽ thành nháy một mắt (wink).
+BLINK_PROMPT = "closed eyes, both eyes closed, "
+BLINK_NEGATIVE = "wink, one eye closed, open eyes"
+MAX_TOKENS = 75  # CLIP của SD/SDXL chỉ đọc 77 token (kể cả 2 token đầu/cuối) — phần dư bị cắt im lặng
+_TOKENIZER = None
+_DROPPED_WARNED: set[str] = set()
+
+
+def fit_prompt(*parts: str) -> str:
+    """Ghép các phần theo THỨ TỰ ƯU TIÊN, thêm từng cụm (tách theo dấu phẩy) tới khi chạm giới hạn token.
+    Cụm không vừa bị bỏ và cảnh báo — thay vì để model cắt mất phần cuối (biểu cảm, trang phục…)."""
+    tags = [t.strip() for p in parts if p for t in p.split(",") if t.strip()]
+    if _TOKENIZER is None:
+        return ", ".join(tags)
+    kept: list[str] = []
+    for tag in tags:
+        trial = ", ".join(kept + [tag])
+        if len(_TOKENIZER(trial).input_ids) - 2 <= MAX_TOKENS:
+            kept.append(tag)
+        elif tag not in _DROPPED_WARNED:
+            _DROPPED_WARNED.add(tag)
+            print(f"[prompt] bỏ cụm vượt {MAX_TOKENS} token: '{tag}'")
+    return ", ".join(kept)
+
+
 def prompt_of(spec: dict, char: dict, pose_desc: str, extra: str) -> str:
-    return ", ".join(p for p in [spec["style"], char["tag"], pose_desc, extra, spec["framing"]] if p)
+    # Biểu cảm → khung hình → nhân vật → phong cách → tư thế. Tư thế đứng cuối vì chỉ cần cho ảnh gốc
+    # (prompt ngắn, luôn vừa); ở bước inpaint mặt, tư thế không còn tác dụng nên bị cắt cũng không sao.
+    return fit_prompt(extra, spec["framing"], char["tag"], spec["style"], pose_desc)
+
+
+def negative_of(*parts: str) -> str:
+    return fit_prompt(*parts)
 
 
 def make_generator(seed: int) -> torch.Generator:
@@ -130,7 +165,7 @@ def run_char(spec: dict, char: dict, pipes, out: Path, cascade, max_expr: int | 
     t2i, inpaint, ip_adapter = pipes
     gen_cfg = spec["generation"]
     W, H = gen_cfg["width"], gen_cfg["height"]
-    negative = ", ".join([spec["negative"], char.get("negative", "")]).strip(", ")
+    negative = negative_of(SAFETY_NEGATIVE, char.get("negative", ""), spec["negative"])
     expressions = char["expressions"][:max_expr] if max_expr else char["expressions"]
     (out / "refs").mkdir(parents=True, exist_ok=True)
     (out / "raw").mkdir(parents=True, exist_ok=True)
@@ -179,8 +214,9 @@ def run_char(spec: dict, char: dict, pipes, out: Path, cascade, max_expr: int | 
                     guidance_scale=gen_cfg["guidance"], generator=make_generator(seed + 100), **ip,
                 ).images[0]
             blink = inpaint(
-                prompt=prompt_of(spec, char, pose_desc, "eyes closed, " + EXPRESSION_PROMPTS.get(expr, expr)),
-                negative_prompt=negative, image=img, mask_image=eye_mask, width=W, height=H,
+                # Chỉ giữ từ cảm xúc đầu tiên: các từ như "wide open eyes" sẽ đánh nhau với "nhắm mắt".
+                prompt=prompt_of(spec, char, pose_desc, BLINK_PROMPT + EXPRESSION_PROMPTS.get(expr, expr).split(",")[0]),
+                negative_prompt=negative_of(BLINK_NEGATIVE, negative), image=img, mask_image=eye_mask, width=W, height=H,
                 strength=gen_cfg["eye_strength"], num_inference_steps=gen_cfg["inpaint_steps"],
                 guidance_scale=gen_cfg["guidance"], generator=make_generator(seed + 200), **ip,
             ).images[0]
@@ -246,6 +282,7 @@ def run_locations(spec: dict, pipes, out_root: Path, only: str | None) -> None:
     style = spec.get("location_style") or f"{spec['style']}, background art, scenery, no humans, vertical composition"
     negative = spec.get("location_negative") or \
         spec["negative"] + ", people, person, 1girl, 1boy, character, text, letters, logo, signage"
+    negative = negative_of("people, person, 1girl, 1boy, text, logo", negative)
     # Biến thể sau (vd. night) img2img từ biến thể đầu để giữ nguyên bố cục căn phòng.
     img2img = AutoPipelineForImage2Image.from_pipe(t2i) if loc_cfg.get("variant_mode") == "img2img_from_first" else None
     ip = {}
@@ -260,7 +297,8 @@ def run_locations(spec: dict, pipes, out_root: Path, only: str | None) -> None:
         loc_dir.mkdir(parents=True, exist_ok=True)
         first = None
         for k, (variant, desc) in enumerate(loc.get("variants", {"day": ""}).items()):
-            prompt = ", ".join(p for p in [style, loc["prompt"], desc] if p)
+            # Biến thể (vd. "night, desk lamps") quyết định ảnh khác nhau → đặt trước, phong cách đặt cuối.
+            prompt = fit_prompt(desc, loc["prompt"], style)
             common = dict(prompt=prompt, negative_prompt=negative, num_inference_steps=steps,
                           guidance_scale=guidance, generator=make_generator(loc["seed"] + k), **ip)
             if first is not None and img2img is not None:
