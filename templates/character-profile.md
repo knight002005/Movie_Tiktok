@@ -10,6 +10,9 @@ voice:
   rate: "+0%"
   pitch: "+0Hz"
   volume: "+0%"
+  expressiveness: 1.0        # tính cách giọng (A4.3a): 0.5 kiềm chế … 1.5 bộc lộ
+  emotion_overrides: {}      # vd. { angry: { rate: -6, pitch: -10, volume: 8, fx: close } }
+  signature_emotions: []     # 3–4 cảm xúc đặc trưng của nhân vật, dùng để thử giọng (A4.2a)
 sprites:
   base_dir: series/<slug>/characters/<char-id>/sprites
   height_px: 1800
@@ -38,7 +41,9 @@ status: draft          # draft | approved
 - **Nỗi sợ**:
 - **Điều không bao giờ làm** (giữ nhất quán R1.D4):
 
-## 3. Cách nói (R1.E5, R1.E6)
+## 3. Cách nói (R1.E5, R1.E6, A4.3a)
+- Tính cách giọng (1 câu): <ví dụ: "nói nhanh, cảm xúc lộ hết ra mặt, giận thì to và nhanh">
+- Cảm xúc thể hiện thế nào: <khi giận / buồn / ngượng nhân vật này nói ra sao — khác người khác ở đâu>
 - Nhịp nói: <nhanh/chậm, câu dài/ngắn>
 - Câu cửa miệng / từ đệm:
 - Xưng hô mặc định: xem ma trận trong bible

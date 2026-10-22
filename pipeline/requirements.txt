@@ -1,0 +1,12 @@
+# Pipeline hậu kỳ (CPU). Cài: python -m pip install -r pipeline/requirements.txt
+# FFmpeg cài riêng: winget install Gyan.FFmpeg (bản full có bộ lọc rubberband)
+vieneu==3.8.3
+faster-whisper
+edge-tts==7.3.1
+numpy
+# Tạo sprite (chạy thử CPU; chạy thật trên Kaggle qua notebook)
+diffusers
+transformers
+accelerate
+rembg[cpu]
+opencv-python-headless<5

@@ -4,173 +4,537 @@
   "title": "Episode scenes (director output → pipeline input)",
   "description": "Danh sách shot của một tập. Shot có thoại: thời lượng lấy theo audio (audio-first); shot không thoại dùng duration_s.",
   "type": "object",
-  "required": ["series", "episode", "format", "scenes", "end_card"],
+  "required": [
+    "series",
+    "episode",
+    "format",
+    "scenes",
+    "end_card"
+  ],
   "additionalProperties": false,
   "properties": {
-    "series": { "type": "string", "pattern": "^[a-z0-9-]+$" },
-    "episode": { "type": "string", "pattern": "^ep[0-9]{2}$" },
-    "script_version": { "type": "integer", "minimum": 1 },
+    "series": {
+      "type": "string",
+      "pattern": "^[a-z0-9-]+$"
+    },
+    "episode": {
+      "type": "string",
+      "pattern": "^ep[0-9]{2}$"
+    },
+    "script_version": {
+      "type": "integer",
+      "minimum": 1
+    },
     "format": {
       "type": "object",
-      "required": ["width", "height", "fps"],
+      "required": [
+        "width",
+        "height",
+        "fps"
+      ],
       "properties": {
-        "width": { "const": 1080 },
-        "height": { "const": 1920 },
-        "fps": { "const": 30 }
+        "width": {
+          "const": 1080
+        },
+        "height": {
+          "const": 1920
+        },
+        "fps": {
+          "const": 30
+        }
       }
     },
     "title_overlay": {
       "description": "Chữ 'Phần X · Tên series' trong 2s đầu (T2.3)",
       "type": "object",
-      "properties": { "text": { "type": "string" }, "duration_s": { "type": "number", "default": 2 } }
+      "properties": {
+        "text": {
+          "type": "string"
+        },
+        "duration_s": {
+          "type": "number",
+          "default": 2
+        }
+      }
     },
     "scenes": {
       "type": "array",
       "minItems": 1,
-      "items": { "$ref": "#/$defs/scene" }
+      "items": {
+        "$ref": "#/$defs/scene"
+      }
     },
     "end_card": {
       "type": "object",
-      "required": ["text"],
+      "required": [
+        "text"
+      ],
       "properties": {
-        "text": { "type": "string", "examples": ["Phần 2 →"] },
-        "subtext": { "type": "string" },
-        "duration_s": { "type": "number", "minimum": 1.5, "maximum": 2.5, "default": 2 }
+        "text": {
+          "type": "string",
+          "examples": [
+            "Phần 2 →"
+          ]
+        },
+        "subtext": {
+          "type": "string"
+        },
+        "duration_s": {
+          "type": "number",
+          "minimum": 1.5,
+          "maximum": 2.5,
+          "default": 2
+        }
       }
     }
   },
   "$defs": {
     "scene": {
       "type": "object",
-      "required": ["id", "location", "variant", "beat", "shots"],
+      "required": [
+        "id",
+        "location",
+        "variant",
+        "beat",
+        "shots"
+      ],
       "additionalProperties": false,
       "properties": {
-        "id": { "type": "string", "pattern": "^s[0-9]{2}$" },
-        "location": { "type": "string", "description": "id bối cảnh đã có trong series" },
-        "variant": { "type": "string", "examples": ["day", "night", "rain"] },
-        "beat": { "type": "string", "enum": ["hook", "setup", "escalation-1", "escalation-2", "escalation-3", "peak", "cliffhanger"] },
-        "ambience": { "type": "string", "pattern": "^sfx\\." },
+        "id": {
+          "type": "string",
+          "pattern": "^s[0-9]{2}$"
+        },
+        "location": {
+          "type": "string",
+          "description": "id bối cảnh đã có trong series"
+        },
+        "variant": {
+          "type": "string",
+          "examples": [
+            "day",
+            "night",
+            "rain"
+          ]
+        },
+        "beat": {
+          "type": "string",
+          "enum": [
+            "hook",
+            "setup",
+            "escalation-1",
+            "escalation-2",
+            "escalation-3",
+            "peak",
+            "cliffhanger"
+          ]
+        },
+        "ambience": {
+          "type": "string",
+          "pattern": "^sfx\\."
+        },
         "music": {
           "type": "object",
           "properties": {
-            "mood": { "type": "string", "enum": ["tension", "romance", "comedy", "sad", "villain", "reveal", "none"] },
-            "action": { "type": "string", "enum": ["start", "continue", "stop", "change"] }
+            "mood": {
+              "type": "string",
+              "enum": [
+                "tension",
+                "romance",
+                "comedy",
+                "sad",
+                "villain",
+                "reveal",
+                "none"
+              ]
+            },
+            "action": {
+              "type": "string",
+              "enum": [
+                "start",
+                "continue",
+                "stop",
+                "change"
+              ]
+            }
           }
         },
-        "filter": { "type": "string", "enum": ["none", "flashback", "night-blue", "warm"] },
-        "shots": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/shot" } }
+        "filter": {
+          "type": "string",
+          "enum": [
+            "none",
+            "flashback",
+            "night-blue",
+            "warm"
+          ]
+        },
+        "shots": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/shot"
+          }
+        }
       }
     },
     "shot": {
       "type": "object",
-      "required": ["id", "type", "camera"],
+      "required": [
+        "id",
+        "type",
+        "camera"
+      ],
       "additionalProperties": false,
       "properties": {
-        "id": { "type": "string", "pattern": "^s[0-9]{2}-sh[0-9]{2}$" },
+        "id": {
+          "type": "string",
+          "pattern": "^s[0-9]{2}-sh[0-9]{2}$"
+        },
         "type": {
           "type": "string",
-          "enum": ["establishing", "two-shot", "single", "close-up", "extreme-close-up", "reaction", "insert", "phone-chat", "phone-call", "title-card"]
+          "enum": [
+            "establishing",
+            "two-shot",
+            "single",
+            "close-up",
+            "extreme-close-up",
+            "reaction",
+            "insert",
+            "phone-chat",
+            "phone-call",
+            "title-card"
+          ]
         },
         "characters": {
           "type": "array",
           "items": {
             "type": "object",
-            "required": ["id", "expression", "position"],
+            "required": [
+              "id",
+              "expression",
+              "position"
+            ],
             "properties": {
-              "id": { "type": "string" },
-              "pose": { "type": "string", "default": "p1" },
-              "expression": { "type": "string" },
-              "position": { "type": "string", "enum": ["left", "center", "right", "offscreen"] },
-              "facing": { "type": "string", "enum": ["left", "right"] },
-              "enter": { "type": "string", "enum": ["none", "slide-left", "slide-right", "fade", "pop"] },
-              "exit": { "type": "string", "enum": ["none", "slide-left", "slide-right", "fade"] },
+              "id": {
+                "type": "string"
+              },
+              "pose": {
+                "type": "string",
+                "default": "p1"
+              },
+              "expression": {
+                "type": "string"
+              },
+              "position": {
+                "type": "string",
+                "enum": [
+                  "left",
+                  "center",
+                  "right",
+                  "offscreen"
+                ]
+              },
+              "facing": {
+                "type": "string",
+                "enum": [
+                  "left",
+                  "right"
+                ]
+              },
+              "enter": {
+                "type": "string",
+                "enum": [
+                  "none",
+                  "slide-left",
+                  "slide-right",
+                  "fade",
+                  "pop"
+                ]
+              },
+              "exit": {
+                "type": "string",
+                "enum": [
+                  "none",
+                  "slide-left",
+                  "slide-right",
+                  "fade"
+                ]
+              },
               "expression_change": {
                 "description": "Đổi biểu cảm giữa shot",
                 "type": "object",
-                "properties": { "to": { "type": "string" }, "at": { "$ref": "#/$defs/timing" } }
-              }
-            }
-          }
-        },
-        "focus": { "type": "string", "description": "id nhân vật được làm nổi / camera nhắm tới" },
-        "camera": {
-          "type": "object",
-          "required": ["move"],
-          "properties": {
-            "move": { "type": "string", "enum": ["static", "push-in", "pull-out", "pan-left", "pan-right", "quick-zoom", "shake", "dutch"] },
-            "zoom_from": { "type": "number", "minimum": 1, "maximum": 3.5 },
-            "zoom_to": { "type": "number", "minimum": 1, "maximum": 3.5 },
-            "target": { "type": "string", "enum": ["face", "eyes", "mouth", "hands", "center", "object"] }
-          }
-        },
-        "line": {
-          "description": "Thoại của shot; null nếu không thoại",
-          "type": ["object", "null"],
-          "required": ["speaker", "text"],
-          "properties": {
-            "speaker": { "type": "string", "description": "id nhân vật hoặc 'narrator'" },
-            "mode": { "type": "string", "enum": ["dialogue", "vo", "inner"], "default": "dialogue" },
-            "text": { "type": "string", "description": "Đúng nguyên văn kịch bản đã duyệt" },
-            "subtitle": { "type": "string", "description": "Chỉ khi phụ đề khác lời đọc (ví dụ đã chuẩn hóa cách đọc)" },
-            "delivery": {
-              "type": "object",
-              "properties": {
-                "emotion": { "type": "string" },
-                "intensity": { "type": "integer", "minimum": 1, "maximum": 5 },
-                "pause_before_ms": { "type": "integer", "minimum": 0, "maximum": 1500 },
-                "pause_after_ms": { "type": "integer", "minimum": 0, "maximum": 1500 }
-              }
-            }
-          }
-        },
-        "duration_s": { "type": "number", "minimum": 0.4, "maximum": 6, "description": "Bắt buộc với shot không thoại" },
-        "chat": {
-          "description": "Dùng cho type=phone-chat",
-          "type": "object",
-          "properties": {
-            "contact": { "type": "string" },
-            "owner": { "type": "string", "description": "id nhân vật cầm điện thoại" },
-            "messages": {
-              "type": "array",
-              "items": {
-                "type": "object",
-                "required": ["from", "text"],
                 "properties": {
-                  "from": { "type": "string", "enum": ["me", "them"] },
-                  "text": { "type": "string" },
-                  "status": { "type": "string", "enum": ["sent", "seen", "typing", "deleted"] }
+                  "to": {
+                    "type": "string"
+                  },
+                  "at": {
+                    "$ref": "#/$defs/timing"
+                  }
                 }
               }
             }
           }
         },
-        "text_overlay": { "type": "string", "description": "Chữ trên màn hình (POV, '3 ngày trước…')" },
-        "insert_asset": { "type": "string", "description": "Đường dẫn ảnh vật thể cho type=insert" },
-        "fx": { "type": "array", "items": { "$ref": "#/$defs/cue", "properties": { "id": { "pattern": "^fx\\." } } } },
-        "sfx": { "type": "array", "items": { "$ref": "#/$defs/cue", "properties": { "id": { "pattern": "^sfx\\." } } } },
-        "transition_out": { "type": "string", "enum": ["cut", "whip", "flash", "fade-black"], "default": "cut" },
-        "note": { "type": "string" }
+        "focus": {
+          "type": "string",
+          "description": "id nhân vật được làm nổi / camera nhắm tới"
+        },
+        "camera": {
+          "type": "object",
+          "required": [
+            "move"
+          ],
+          "properties": {
+            "move": {
+              "type": "string",
+              "enum": [
+                "static",
+                "push-in",
+                "pull-out",
+                "pan-left",
+                "pan-right",
+                "quick-zoom",
+                "shake",
+                "dutch"
+              ]
+            },
+            "zoom_from": {
+              "type": "number",
+              "minimum": 1,
+              "maximum": 3.5
+            },
+            "zoom_to": {
+              "type": "number",
+              "minimum": 1,
+              "maximum": 3.5
+            },
+            "target": {
+              "type": "string",
+              "enum": [
+                "face",
+                "eyes",
+                "mouth",
+                "hands",
+                "center",
+                "object"
+              ]
+            }
+          }
+        },
+        "line": {
+          "description": "Thoại của shot; null nếu không thoại",
+          "type": [
+            "object",
+            "null"
+          ],
+          "required": [
+            "speaker",
+            "text",
+            "delivery"
+          ],
+          "properties": {
+            "speaker": {
+              "type": "string",
+              "description": "id nhân vật hoặc 'narrator'"
+            },
+            "mode": {
+              "type": "string",
+              "enum": [
+                "dialogue",
+                "vo",
+                "inner"
+              ],
+              "default": "dialogue"
+            },
+            "text": {
+              "type": "string",
+              "description": "Đúng nguyên văn kịch bản đã duyệt"
+            },
+            "subtitle": {
+              "type": "string",
+              "description": "Chỉ khi phụ đề khác lời đọc (ví dụ đã chuẩn hóa cách đọc)"
+            },
+            "delivery": {
+              "type": "object",
+              "properties": {
+                "emotion": {
+                  "type": "string",
+                  "enum": [
+                    "neutral",
+                    "smile",
+                    "happy",
+                    "panic",
+                    "angry",
+                    "cold",
+                    "sad",
+                    "cry",
+                    "embarrassed",
+                    "surprised",
+                    "smirk",
+                    "threat",
+                    "whisper",
+                    "love"
+                  ],
+                  "description": "Cảm xúc đọc (A4.3a) — bắt buộc, khớp pipeline/voice_emotion.py"
+                },
+                "intensity": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 5
+                },
+                "pause_before_ms": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 1500
+                },
+                "pause_after_ms": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 1500
+                }
+              },
+              "required": [
+                "emotion",
+                "intensity"
+              ]
+            }
+          }
+        },
+        "duration_s": {
+          "type": "number",
+          "minimum": 0.4,
+          "maximum": 6,
+          "description": "Bắt buộc với shot không thoại"
+        },
+        "chat": {
+          "description": "Dùng cho type=phone-chat",
+          "type": "object",
+          "properties": {
+            "contact": {
+              "type": "string"
+            },
+            "owner": {
+              "type": "string",
+              "description": "id nhân vật cầm điện thoại"
+            },
+            "messages": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "from",
+                  "text"
+                ],
+                "properties": {
+                  "from": {
+                    "type": "string",
+                    "enum": [
+                      "me",
+                      "them"
+                    ]
+                  },
+                  "text": {
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "string",
+                    "enum": [
+                      "sent",
+                      "seen",
+                      "typing",
+                      "deleted"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "text_overlay": {
+          "type": "string",
+          "description": "Chữ trên màn hình (POV, '3 ngày trước…')"
+        },
+        "insert_asset": {
+          "type": "string",
+          "description": "Đường dẫn ảnh vật thể cho type=insert"
+        },
+        "fx": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/cue",
+            "properties": {
+              "id": {
+                "pattern": "^fx\\."
+              }
+            }
+          }
+        },
+        "sfx": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/cue",
+            "properties": {
+              "id": {
+                "pattern": "^sfx\\."
+              }
+            }
+          }
+        },
+        "transition_out": {
+          "type": "string",
+          "enum": [
+            "cut",
+            "whip",
+            "flash",
+            "fade-black"
+          ],
+          "default": "cut"
+        },
+        "note": {
+          "type": "string"
+        }
       },
       "allOf": [
         {
-          "if": { "properties": { "line": { "type": "null" } } },
-          "then": { "required": ["duration_s"] }
+          "if": {
+            "properties": {
+              "line": {
+                "type": "null"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "duration_s"
+            ]
+          }
         }
       ]
     },
     "cue": {
       "type": "object",
-      "required": ["id"],
+      "required": [
+        "id"
+      ],
       "properties": {
-        "id": { "type": "string" },
-        "at": { "$ref": "#/$defs/timing" }
+        "id": {
+          "type": "string"
+        },
+        "at": {
+          "$ref": "#/$defs/timing"
+        }
       }
     },
     "timing": {
       "description": "'start' | 'end' | 'line_start' | 'line_end' | 'word:<n>' | số giây kể từ đầu shot",
       "oneOf": [
-        { "type": "string", "pattern": "^(start|end|line_start|line_end|word:[0-9]+)$" },
-        { "type": "number", "minimum": 0 }
+        {
+          "type": "string",
+          "pattern": "^(start|end|line_start|line_end|word:[0-9]+)$"
+        },
+        {
+          "type": "number",
+          "minimum": 0
+        }
       ]
     }
   }

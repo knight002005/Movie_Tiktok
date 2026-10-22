@@ -1,0 +1,43 @@
+{
+  "lines": [
+    {
+      "id": "l01",
+      "text": "Chờ em với! Cửa thang máy sắp đóng rồi!",
+      "voice": "Trúc Ly",
+      "rate": "+0%",
+      "pitch": "+0Hz",
+      "expressiveness": 1.2,
+      "emotion": "panic",
+      "intensity": 4,
+      "engine": "vieneu",
+      "ref_dir": "series/sep-oi-em-khong-co-y/voices/linh",
+      "f0_hz": 220
+    },
+    {
+      "id": "l02",
+      "text": "Trời ơi… em làm đổ cà phê lên áo anh rồi.",
+      "voice": "Trúc Ly",
+      "rate": "+0%",
+      "pitch": "+0Hz",
+      "expressiveness": 1.2,
+      "emotion": "embarrassed",
+      "intensity": 4,
+      "engine": "vieneu",
+      "ref_dir": "series/sep-oi-em-khong-co-y/voices/linh",
+      "f0_hz": 220
+    },
+    {
+      "id": "l03",
+      "text": "Khoan đã… anh là trưởng phòng mới sao?",
+      "voice": "Trúc Ly",
+      "rate": "+0%",
+      "pitch": "+0Hz",
+      "expressiveness": 1.2,
+      "emotion": "surprised",
+      "intensity": 4,
+      "engine": "vieneu",
+      "ref_dir": "series/sep-oi-em-khong-co-y/voices/linh",
+      "f0_hz": 220
+    }
+  ]
+}

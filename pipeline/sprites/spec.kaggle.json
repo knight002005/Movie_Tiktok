@@ -1,0 +1,39 @@
+{
+  "_note": "Cấu hình chạy thật trên Kaggle GPU (T4/P100). casting-designer cập nhật 'characters' từ hồ sơ nhân vật. Kiểm tra giấy phép model trước khi dùng thương mại.",
+  "model": {
+    "model_id": "cagliostrolab/animagine-xl-4.0",
+    "low_vram": false,
+    "ip_adapter": {
+      "repo": "h94/IP-Adapter",
+      "subfolder": "sdxl_models",
+      "weight": "ip-adapter_sdxl.bin",
+      "scale": 0.6
+    }
+  },
+  "style": "anime style, modern josei illustration, clean lineart, cel shading, soft lighting, masterpiece, high score, great score, absurdres",
+  "framing": "half body, upper body, facing viewer, three-quarter view, centered, simple white background",
+  "negative": "lowres, bad anatomy, bad hands, extra fingers, missing fingers, text, watermark, signature, username, logo, cropped, worst quality, low quality, low score, bad score, blurry, child, loli, chibi, nsfw, cleavage, revealing clothes, multiple people, open mouth",
+  "face_fallback_box": [0.33, 0.12, 0.34, 0.24],
+  "generation": {
+    "width": 832,
+    "height": 1216,
+    "steps": 28,
+    "inpaint_steps": 30,
+    "guidance": 5.0,
+    "face_strength": 0.7,
+    "eye_strength": 0.9,
+    "sprite_height": 1800
+  },
+  "characters": [
+    {
+      "id": "linh",
+      "seed": 24101,
+      "tag": "1girl, solo, adult woman, 24 years old, Vietnamese office worker, shoulder-length dark brown hair, side bangs, warm brown eyes, small gold star hairclip, cream blouse, navy pencil skirt",
+      "poses": {
+        "p1": "standing, arms at sides",
+        "p2": "holding a smartphone near chest"
+      },
+      "expressions": ["neutral", "smile", "angry", "sad", "surprised", "embarrassed", "cold", "cry", "panic"]
+    }
+  ]
+}

@@ -5,3 +5,5 @@ series/*/episodes/*/audio/
 series/*/episodes/*/out/
 studio/out/
 .cache/
+series/*/voice-tests/audio/
+__pycache__/

@@ -8,8 +8,9 @@
 ## A4.2 Engine TTS (ngân sách 0 đồng)
 | Engine | Ghi chú |
 |---|---|
-| **edge-tts** (mặc định) | Miễn phí; giọng `vi-VN-HoaiMyNeural` (nữ), `vi-VN-NamMinhNeural` (nam); hỗ trợ `rate`, `pitch`, `volume`; trả mốc thời gian theo từ (WordBoundary). Là thư viện không chính thức dùng dịch vụ của Microsoft — rủi ro bị chặn/đổi điều khoản; giữ engine sau một lớp adapter để thay được |
-| TTS tiếng Việt mã nguồn mở chạy cục bộ | Phương án dự phòng / thêm giọng (có thể clone giọng mẫu **có quyền sử dụng**). Cần đánh giá chất lượng & tốc độ trên GTX 1650 trước khi dùng |
+| **VieNeu-TTS v3 Turbo** (`engine: vieneu`, **mặc định**) | Apache-2.0 (code, trọng số, codec MOSS-Audio-Tokenizer-Nano) — thẻ model cho phép dùng trong nội dung thương mại/kiếm tiền. Chạy CPU (~2× thời gian thực trên i7-9750H), 48 kHz. 25 giọng mẫu (nam/nữ, Bắc/Trung/Nam) mà người đọc đã đồng ý cho AI. Clone giọng + **cảm xúc** từ ghi âm mẫu 3–8s (`series/<slug>/voices/<id>/<emotion>.wav`). Không trả mốc thời gian → `pipeline/align.py` (faster-whisper) căn mốc và đo tỷ lệ khớp. Có watermark âm thanh AI (giữ nguyên) |
+| edge-tts (`engine: edge`, dự phòng) | Miễn phí; chỉ 2 giọng tiếng Việt (`vi-VN-HoaiMyNeural`, `vi-VN-NamMinhNeural`); có mốc thời gian sẵn. Thư viện không chính thức dùng dịch vụ Microsoft — rủi ro bị chặn/đổi điều khoản |
+| Đã loại | F5-TTS Vietnamese (CC-BY-NC-SA), V-TTS (CC BY-NC), XTTS-v2 (giấy phép phi thương mại) — không dùng cho kênh có thể kiếm tiền |
 | ElevenLabs và dịch vụ trả phí | **Không dùng** khi chưa được anh cho phép (vi phạm ngân sách 0 đồng) |
 - **Không clone giọng người thật** (người nổi tiếng, người quen) khi không có sự đồng ý bằng văn bản.
 
@@ -20,6 +21,18 @@ Chất lượng TTS tiếng Việt chênh lệch rất nhiều giữa nhà cung 
 - Chấm theo thang 1–5: đúng dấu thanh, tự nhiên (không "robot"), thể hiện cảm xúc, phân biệt được với vai khác, đọc đúng từ khó.
 - Kết quả ghi vào bible mục 11; **anh nghe và duyệt tại GATE-SERIES**. Giọng < 3/5 ở tiêu chí "đúng dấu thanh" → loại.
 - Đổi engine/giọng giữa series chỉ khi bắt buộc (giọng thay đổi làm khán giả mất cảm giác nhân vật).
+
+## A4.3a Giọng theo tính cách và biểu cảm (bắt buộc — không đọc "ngang")
+Anh yêu cầu: **giọng không được đều đều như người máy; mỗi nhân vật có tính cách giọng riêng; mỗi câu đọc theo biểu cảm.** Cài đặt trong `pipeline/voice_emotion.py`, mỗi câu dựng từ 3 lớp:
+1. **Giọng gốc nhân vật** — `voice_id`, `rate`, `pitch`, `volume` (hồ sơ nhân vật).
+2. **Tính cách giọng** — `expressiveness` (0.5 kiềm chế … 1.5 bộc lộ) nhân với độ lệch của cảm xúc; tùy chọn `emotion_overrides` để một nhân vật "giận kiểu riêng" (ví dụ người lạnh lùng giận thì chậm và trầm hơn chứ không to hơn).
+3. **Cảm xúc của câu** — `emotion` × `intensity` (1–5) theo bảng: `neutral, smile, happy, panic, angry, cold, sad, cry, embarrassed, surprised, smirk, threat, whisper, love`. Câu được tách theo dấu câu: `?` lên giọng, `!` mạnh lên, `…` chậm và ngập ngừng, có khoảng lặng riêng; kèm hiệu ứng âm (run giọng khi khóc/hoảng, mỏng khi thì thầm, dồn nén khi giận).
+- Độ lệch tối đa so với giọng gốc: cao độ ±25Hz, tốc độ ±30%, âm lượng ±35% — vượt quá giọng méo.
+- `director` **bắt buộc** điền `line.delivery.emotion` và `intensity` cho mọi câu thoại; không để trống (trống = `neutral` = dễ "ngang").
+- Mẫu tính cách khởi điểm: nhân vật bốc đồng 1.2–1.4, điềm tĩnh/lạnh 0.5–0.7, phản diện kiểm soát 0.8–1.0, hài 1.3–1.5.
+- **Nguồn cảm xúc, theo thứ tự chất lượng:** (1) ghi âm diễn cảm đúng cảm xúc của người cho giọng (VieNeu clone cả cảm xúc; lớp ngữ điệu tự giảm còn 35%); (2) giọng mẫu VieNeu + lớp ngữ điệu (tempo/pitch bằng rubberband giữ formant, không méo); (3) edge-tts + lớp ngữ điệu.
+- **Đã kiểm chứng (2026-10-21):** "tự tạo mẫu cảm xúc" từ giọng mẫu VieNeu KHÔNG hiệu quả (giọng mẫu luôn đọc kiểu trung tính) → cảm xúc thật chỉ đến từ ghi âm người thật diễn. Hướng dẫn thu & mẫu đồng ý: `series/<slug>/voices/README.md`.
+- **Kiểm tra phát âm tự động:** mỗi câu VieNeu có `match` (Whisper nghe lại, không gợi ý kịch bản). `match` < 0,85 → đánh dấu "nghe lại" trong thử giọng/QA; Whisper bản nhỏ cũng hay nghe nhầm câu rất ngắn nên cờ là để anh nghe, không tự kết luận là sai.
 
 ## A4.3 Diễn xuất bằng TTS
 - Cảm xúc thể hiện qua: dấu câu (`…`, `!`, `?`), độ dài câu, `rate` (+10–20% khi gấp/giận, -10–15% khi buồn/lạnh), `pitch` (±5–15Hz), khoảng lặng.

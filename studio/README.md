@@ -10,3 +10,11 @@ Sẽ chứa composition `Episode` nhận `out/props.json` và dựng:
 
 Remotion miễn phí cho cá nhân và công ty nhỏ — kiểm tra giấy phép tại remotion.dev nếu quy mô thay đổi.
 Khi xây, dùng các skill `remotion:*` có sẵn trong Claude Code.
+
+## Lệnh
+
+```bash
+npm i              # cài phụ thuộc
+npm run dev        # mở Remotion Studio để xem trước
+npx remotion render Demo out/demo.mp4   # render demo
+```

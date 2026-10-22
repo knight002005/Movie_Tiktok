@@ -53,4 +53,6 @@ Subagent không gọi được subagent khác → **việc điều phối luôn 
 
 ## Trạng thái triển khai
 - ✅ Tiền kỳ: series → kịch bản → phản biện → phân cảnh (`scenes.json`) → gói đăng.
-- ⏳ Hậu kỳ tự động (giọng, ghép Remotion, render, QA video): `pipeline/` và `studio/` — **chưa xây**. Khi chưa có, dừng ở `directed` và báo anh.
+- ✅ Hậu kỳ đã có: giọng VieNeu-TTS có cảm xúc + căn mốc Whisper (`pipeline/voice.py`), khẩu hình (`visemes.py`), dựng Remotion (`studio/`, hiện là demo), chuẩn hóa (`finalize.py`), QA kỹ thuật (`qa_check.py`), tạo sprite (`pipeline/sprites/`, chạy trên Kaggle).
+- ⏳ Còn thiếu: bước `compose` (scenes.json → props Remotion) và composition `Episode` tổng quát dùng sprite PNG thật. Khi chưa có, dừng ở `directed` và báo anh.
+- Chạy Python của pipeline bằng `python -I -X utf8` (console Windows không phải UTF-8).

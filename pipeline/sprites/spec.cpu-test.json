@@ -1,0 +1,55 @@
+{
+  "_note": "CHỈ để kiểm thử code trên CPU (model nhỏ, chất lượng thấp, giấy phép phi thương mại). Không dùng ảnh này cho phim.",
+  "model": {
+    "model_id": "stabilityai/sd-turbo",
+    "low_vram": false
+  },
+  "style": "anime style illustration, clean lineart, cel shading",
+  "framing": "upper body portrait, facing viewer, centered, plain white background",
+  "negative": "text, watermark, child, nsfw, multiple people, open mouth",
+  "face_fallback_box": [
+    0.3,
+    0.1,
+    0.4,
+    0.3
+  ],
+  "generation": {
+    "width": 512,
+    "height": 768,
+    "steps": 2,
+    "inpaint_steps": 4,
+    "guidance": 0.0,
+    "face_strength": 0.6,
+    "eye_strength": 0.75,
+    "sprite_height": 900,
+    "bg_width": 512,
+    "bg_height": 896,
+    "bg_height_out": 1920
+  },
+  "characters": [
+    {
+      "id": "linh",
+      "seed": 24101,
+      "tag": "adult woman, office worker, shoulder-length dark brown hair, side bangs, brown eyes, gold star hairclip, cream blouse",
+      "poses": {
+        "p1": "standing"
+      },
+      "expressions": [
+        "neutral",
+        "smile",
+        "surprised"
+      ]
+    }
+  ],
+  "locations": [
+    {
+      "id": "loc-van-phong",
+      "seed": 5100,
+      "prompt": "modern open-plan office, desks with monitors, large windows, city view",
+      "variants": {
+        "day": "bright daylight",
+        "night": "night, warm desk lamps, city lights"
+      }
+    }
+  ]
+}

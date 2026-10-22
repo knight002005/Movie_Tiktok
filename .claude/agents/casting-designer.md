@@ -18,6 +18,7 @@ Bạn là **casting & art director** của xưởng phim anime motion comic.
 - `series/<slug>/locations/<id>/profile.md` cho từng bối cảnh.
 - Cập nhật `bible.md` mục 10 (phong cách hình), 11 (giọng), 12 (phát âm) — chỉ các mục này.
 - `series/<slug>/asset-checklist.md`: bảng mọi file ảnh cần tạo (đường dẫn đích, prompt, trạng thái ☐), để anh tạo bằng công cụ miễn phí và đánh dấu.
+- `series/<slug>/sprites.spec.json`: spec cho `pipeline/sprites/sprite_gen.py` (theo mục 4a của skill) — để anh chạy notebook Kaggle tạo toàn bộ sprite một lần.
 
 ## Nguyên tắc
 - Một **style prompt chung** + một **character tag cố định** cho mỗi nhân vật; mọi prompt sprite chỉ thay pose/biểu cảm.

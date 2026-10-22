@@ -1,0 +1,17 @@
+{
+  "slug": "sep-oi-em-khong-co-y",
+  "title": "Sếp Ơi, Em Không Cố Ý!",
+  "state": "developing",
+  "gates": {
+    "series": { "approved": false, "at": null, "note": "" }
+  },
+  "assets_ready": {
+    "characters": {},
+    "locations": {}
+  },
+  "episodes_planned": 12,
+  "posting_schedule": { "days": ["Tue", "Thu", "Sat"], "time": "20:00", "tz": "+07:00" },
+  "history": [
+    { "at": "2026-10-21T22:23:48+07:00", "state": "developing", "by": "showrunner (phiên chính)", "note": "Khởi tạo series từ ý tưởng tình ái công sở anh đưa ra" }
+  ]
+}

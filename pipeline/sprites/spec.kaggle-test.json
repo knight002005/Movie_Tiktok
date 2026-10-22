@@ -1,0 +1,75 @@
+{
+  "_note": "CHẠY THỬ Kaggle từ spec series: Linh (p1, 4 biểu cảm) + văn phòng (day, night) — duyệt ảnh gốc trước khi chạy đủ.",
+  "model": {
+    "model_id": "cagliostrolab/animagine-xl-4.0",
+    "low_vram": false,
+    "ip_adapter": {
+      "repo": "h94/IP-Adapter",
+      "subfolder": "sdxl_models",
+      "weight": "ip-adapter_sdxl.bin",
+      "scale": 0.6
+    }
+  },
+  "style": "safe, anime style, modern josei illustration, clean lineart, cel shading, soft even lighting, pastel colors, mature adult proportions, masterpiece, high score, great score, absurdres",
+  "framing": "half body, upper body, facing viewer, three-quarter view, centered, simple white background",
+  "negative": "lowres, bad anatomy, bad hands, extra fingers, missing fingers, fused fingers, text, watermark, signature, username, logo, cropped, worst quality, low quality, low score, bad score, average score, blurry, child, loli, shota, chibi, teenager, school uniform, childlike face, oversized eyes, nsfw, explicit, sensitive, cleavage, revealing clothes, multiple people, open mouth",
+  "face_fallback_box": [
+    0.33,
+    0.12,
+    0.34,
+    0.24
+  ],
+  "generation": {
+    "width": 832,
+    "height": 1216,
+    "steps": 28,
+    "inpaint_steps": 30,
+    "guidance": 5.0,
+    "face_strength": 0.7,
+    "eye_strength": 0.9,
+    "sprite_height": 1800
+  },
+  "characters": [
+    {
+      "id": "linh",
+      "seed": 24101,
+      "tag": "1girl, solo, adult woman, office lady, 24 years old, Vietnamese, medium height, mature face, dark brown hair in a high ponytail, a yellow pencil stuck in her hair tie, side bangs, warm brown eyes, mustard yellow cardigan over cream blouse, beige knee-length skirt, small blank yellow sticky notes stuck on cardigan hem",
+      "negative": "1boy, male, beard",
+      "poses": {
+        "p1": "standing, arms relaxed at sides, leaning slightly forward, energetic posture"
+      },
+      "expressions": [
+        "neutral",
+        "smile",
+        "surprised",
+        "embarrassed"
+      ]
+    }
+  ],
+  "location_style": "safe, anime background art, modern josei illustration, clean lineart, cel shading, detailed scenery, no humans, scenery, eye-level view, vertical composition, masterpiece, high score, great score, absurdres",
+  "location_negative": "people, person, human, 1girl, 1boy, character, crowd, silhouette of a person, text, letters, numbers, signage text, logo, brand name, watermark, signature, poster with writing, lowres, worst quality, low quality, low score, bad score, blurry, distorted perspective, fisheye",
+  "location_generation": {
+    "width": 768,
+    "height": 1344,
+    "steps": 28,
+    "guidance": 5.0,
+    "variant_mode": "img2img_from_first",
+    "variant_strength": 0.55,
+    "upscale_to": [
+      1440,
+      2560
+    ],
+    "out_pattern": "locations/{id}/{id}_{variant}.png"
+  },
+  "locations": [
+    {
+      "id": "loc-van-phong",
+      "seed": 51101,
+      "prompt": "open-plan creative agency office, rows of light wood desks with computer monitors showing blank soft blue screens, many green plants, large windows with a generic city skyline, foreground desk with many blank yellow sticky notes stuck around the monitor edge, neighboring desk with a drawing tablet and a headphone stand, tidy desk with a tablet stand in the background, no humans, no text, vertical composition",
+      "variants": {
+        "day": "bright morning sunlight through the windows, white and light wood tones, pastel colors, cheerful",
+        "night": "late evening, dark blue and purple tones, city lights outside the windows, only a few warm desk lamps on, monitors glowing softly, quiet empty office"
+      }
+    }
+  ]
+}

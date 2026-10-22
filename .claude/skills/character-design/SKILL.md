@@ -27,6 +27,11 @@ Cho mỗi nhân vật: `pose (≥2) × biểu cảm (≥8) × {mở mắt, nhắ
 
 Mẹo giảm số ảnh: tạo `p1_<expr>` trước; biến thể nhắm mắt có thể làm bằng **chỉnh sửa ảnh** (inpaint vùng mắt) thay vì tạo mới — giữ nhân vật giống hệt.
 
+## 4a. Công cụ tạo sprite của xưởng (ưu tiên dùng)
+- `pipeline/sprites/sprite_gen.py` + `pipeline/sprites/spec.kaggle.json`: điền mỗi nhân vật một mục `characters[]` gồm `id`, `seed` (cố định), `tag` (= CHARACTER TAG ở mục 2, dạng tag tiếng Anh), `poses` (p1, p2 → mô tả), `expressions` (theo hồ sơ).
+- Ghi spec của series vào `series/<slug>/sprites.spec.json` (chép từ spec.kaggle.json rồi thay `characters`), sau đó build notebook: `python -I pipeline/sprites/build_notebook.py --spec series/<slug>/sprites.spec.json --out series/<slug>/kaggle_sprites.ipynb`.
+- Nguyên lý nhất quán: ảnh gốc mỗi pose → biểu cảm chỉ inpaint vùng mặt → nhắm mắt chỉ inpaint dải mắt. `manifest.json` trả tọa độ mặt/mắt/miệng để điền vào `profile.md`; `contact_sheet.jpg` để anh soát tại GATE-SERIES.
+
 ## 4. Cách tạo ảnh miễn phí (gợi ý cho anh — kiểm tra điều khoản từng công cụ trước khi dùng)
 | Cách | Ưu | Nhược |
 |---|---|---|
@@ -42,7 +47,9 @@ Sau khi có sprite, ghi vào `profile.md` → `sprites.poses.<pose>.mouth {x, y,
 Cách đo: mở ảnh bằng trình xem có tọa độ chuột, hoặc nhờ phiên chính đọc ảnh và ước lượng, sau đó kiểm tra bằng lớp debug của `studio/`.
 
 ## 6. Casting giọng (A4)
-- Liệt kê giọng có sẵn: `edge-tts --list-voices` (lọc `vi-VN`).
+- **Mặc định VieNeu-TTS** (`engine: vieneu`): mỗi nhân vật chọn MỘT giọng mẫu khác nhau trong 25 giọng (liệt kê: `python -I -X utf8 -c "from vieneu import Vieneu; [print(v) for v in Vieneu().list_preset_voices()]"`). Ghi `voice` (tên giọng), `f0_hz` (~210–230 nữ, ~110–130 nam), `ref_dir: series/<slug>/voices/<id>`. Tránh giọng mẫu mang tên trùng người nổi tiếng. Phân vai series đầu: Linh = Trúc Ly, Khải = Hải Đăng, Vy = Ngọc Huyền, Tùng = Adam bựa (đề xuất, chờ anh nghe duyệt).
+- Khi có ghi âm diễn cảm (xem `series/<slug>/voices/README.md`): đặt vào `voices/<id>/<emotion>.wav`, không cần sửa gì khác.
+- Dự phòng edge-tts: `edge-tts --list-voices` (lọc `vi-VN`).
 - Phân vai theo `voice_id` + `rate` + `pitch`. Ví dụ khởi điểm (nghe thử rồi chỉnh):
 | Vai | voice_id | rate | pitch |
 |---|---|---|---|
@@ -50,7 +57,10 @@ Cách đo: mở ảnh bằng trình xem có tọa độ chuột, hoặc nhờ ph
 | Nữ phản diện lạnh, chậm | vi-VN-HoaiMyNeural | -6% | -12Hz |
 | Nam chính trầm, kiệm lời | vi-VN-NamMinhNeural | -8% | -10Hz |
 | Nam phụ vui tính | vi-VN-NamMinhNeural | +12% | +12Hz |
-- Tạo một câu thử cho mỗi vai (câu cửa miệng của nhân vật) để anh nghe trước GATE-SERIES — chỉ khi pipeline TTS đã sẵn sàng.
+- Mỗi vai thêm **tính cách giọng** (A4.3a): `expressiveness` + 3–4 `signature_emotions` + `emotion_overrides` nếu nhân vật thể hiện một cảm xúc khác thường (ví dụ Khải giận thì trầm và chậm, không to). Gợi ý khởi điểm: Linh 1.2, Khải 0.6, Vy 0.9, Tùng 1.4.
+- **Thử giọng** (A4.2a): viết `series/<slug>/voice-tests/cast-audition.json` — mỗi vai 4 câu, mỗi câu một cảm xúc đặc trưng — rồi chạy
+  `python -I pipeline/voice.py --lines series/<slug>/voice-tests/cast-audition.json --out series/<slug>/voice-tests/audio`
+  và ghép thành `cast-audition.mp3` để anh nghe tại GATE-SERIES. Mẫu có sẵn trong series đầu tiên.
 
 ## 7. Bối cảnh
 - Ưu tiên bối cảnh **dùng lại nhiều**: bàn làm việc nữ chính, phòng sếp, phòng họp, pantry, thang máy, hành lang, sân thượng, quán cà phê, căn hộ nữ chính, đường phố đêm mưa.
